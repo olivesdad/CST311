@@ -1,9 +1,9 @@
 from email import message
 from socket import *
 serverName = '127.0.0.1'
-serverPort = 12000
+serverPort = 3033
 clientSocket = socket(AF_INET, SOCK_DGRAM)
-mess = input("input lowecase sentenc: ")
+mess = input("input lowecase sentence: ")
 
 clientSocket.sendto(mess.encode(), (serverName, serverPort))
 

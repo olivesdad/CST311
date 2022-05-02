@@ -1,7 +1,7 @@
 from base64 import encode
 from socket import *
 serverName = '127.0.0.1'
-serverPort = 12000
+serverPort = 12001
 
 
 def main():
