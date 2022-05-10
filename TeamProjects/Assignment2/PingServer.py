@@ -10,6 +10,7 @@ serverSocket = socket(AF_INET, SOCK_DGRAM)
 # Assign IP address and port number to socket
 serverSocket.bind(('', 12000))
 pingnum = 0
+print('server running')
 while True:
     # Count the pings received
     pingnum += 1
