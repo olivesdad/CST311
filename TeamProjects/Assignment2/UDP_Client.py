@@ -1,3 +1,4 @@
+from decimal import DivisionByZero
 from email import message
 from socket import *
 import time
@@ -11,14 +12,16 @@ def timeDiff(start, end, acc):
 
 #call at the end to print results of ping test
 def printSummary(hit, pings, rtt):
-    loss = ((pings - hit) / pings)*100 
-    rttAvg = rtt / hit
-    print(f'\nRESULTS: \n'
-          f'Attempts:    {pings}\n'
-          f'Responsees:  {hit}\n'
-          f'Loss rate:   {round(loss,2)}%\n'
-          f'Average RTT: {round(rttAvg,2)}ms')
-
+    try:
+        loss = ((pings - hit) / pings)*100 
+        rttAvg = rtt / hit
+        print(f'\nRESULTS: \n'
+              f'Attempts:    {pings}\n'
+              f'Responsees:  {hit}\n'
+              f'Loss rate:   {round(loss,2)}%\n'
+              f'Average RTT: {round(rttAvg,2)}ms')
+    except ZeroDivisionError:
+        print("NO RESPONSE!")
 #ping loop
 def pingaroo(ip, port):
     clientSocket = socket(AF_INET, SOCK_DGRAM)

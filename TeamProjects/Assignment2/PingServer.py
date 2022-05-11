@@ -3,6 +3,12 @@
 # randomized lost packets
 import random
 import time
+
+#######################
+#set delay in response#
+delay = 0.127
+#######################
+
 from socket import *
 
 # Create a UDP socket
@@ -26,5 +32,5 @@ while True:
     if rand < 4 and pingnum % 10 != 1:
         continue
     # Otherwise, the server responds
-    time.sleep(0.3)
+    time.sleep(delay)
     serverSocket.sendto(message, address)
