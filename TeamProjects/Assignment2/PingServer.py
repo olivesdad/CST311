@@ -2,6 +2,7 @@
 # We will need the following module to generate
 # randomized lost packets
 import random
+import time
 from socket import *
 
 # Create a UDP socket
@@ -25,4 +26,5 @@ while True:
     if rand < 4 and pingnum % 10 != 1:
         continue
     # Otherwise, the server responds
+    time.sleep(0.3)
     serverSocket.sendto(message, address)
