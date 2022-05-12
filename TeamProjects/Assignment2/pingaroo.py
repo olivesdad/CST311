@@ -51,6 +51,9 @@ def pingaroo(ip, port):
     clientSocket.close()
 
 if __name__ == '__main__':
+    if len(sys.argv) != 3:
+        print('sad')
+        quit()
     pingaroo(sys.argv[1], int(sys.argv[2]))
 
 
