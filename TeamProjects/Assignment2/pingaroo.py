@@ -3,6 +3,7 @@ from email import message
 from socket import *
 import time
 import sys
+numPings = 10
 
 #retrund start end time and add to rtt accumulator 
 def timeDiff(start, end, acc):
@@ -23,13 +24,13 @@ def printSummary(hit, pings, rtt):
     except ZeroDivisionError:
         print("NO RESPONSE!")
 #ping loop
-def pingaroo(ip, port):
+def pingaroo(ip, port, pings):
     clientSocket = socket(AF_INET, SOCK_DGRAM)
     clientSocket.settimeout(1)
-    pings = 10
     count = 0
     acc = [0.0]
     hit = 0
+    print(f'Ping to: {ip}:{port} Count: {pings}')
 
     while count < pings:
         #try block, get a time stamp, send message wait for response, print response increment hit counter
@@ -52,8 +53,8 @@ def pingaroo(ip, port):
 
 if __name__ == '__main__':
     if len(sys.argv) != 3:
-        print('sad')
+        print('usage: \n python pingaroo <ip> <port>')
         quit()
-    pingaroo(sys.argv[1], int(sys.argv[2]))
+    pingaroo(sys.argv[1], int(sys.argv[2]), numPings)
 
 
