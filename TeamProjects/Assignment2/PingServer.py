@@ -6,7 +6,7 @@ import time
 
 #######################
 #set delay in response#
-delay = 0
+delay = 0.120
 #######################
 
 from socket import *

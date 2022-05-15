@@ -13,12 +13,14 @@ def timeDiff(start, end, rtts):
     return diff
 
 #call at the end to print results of ping test
-def printSummary(hit, pings, rtts):
+def printSummary(pings, rtts):
     try:
-        loss = (len(rtts) / pings)*100 
+        loss = (int(pings) - len(rtts)) / int(pings) *100
+        print(f"pings: {pings} len: {len(rtts)} loss {loss}")
         min= timeouts * 1000
         max = 0
         sum = 0
+        hit = len(rtts)
 
         for num in rtts:
             if num < min:
@@ -44,7 +46,7 @@ def pingaroo(ip, port, pings):
     clientSocket.settimeout(timeouts)
     count = 0
     rtts = []
-    hit = 0
+    
     print('Ping to: '+ str(ip)+':'+str(port)+' Count: '+ str(pings))
 
     while count < pings:
@@ -54,7 +56,7 @@ def pingaroo(ip, port, pings):
             clientSocket.sendto('s'.encode(), (ip, port))
             modMess, serverAddress = clientSocket.recvfrom(2048)
             print("PING "+ str(ip)+" time=" + str(timeDiff(start, time.perf_counter(), rtts)) + "ms") 
-            hit += 1
+    
         
         #socket throws timeout exception so if we exceet timeout go here and just print timeout
         except timeout:
@@ -63,7 +65,7 @@ def pingaroo(ip, port, pings):
         count +=1
 
     #do the summary thing
-    printSummary(hit , count, rtts) 
+    printSummary(count, rtts) 
     clientSocket.close()
 
 if __name__ == '__main__':
