@@ -6,7 +6,7 @@ import time
 
 #######################
 #set delay in response#
-delay = 0.0
+delay = 0.120
 #######################
 
 from socket import *
@@ -33,4 +33,4 @@ while True:
         continue
     # Otherwise, the server responds
     time.sleep(delay)
-    serverSocket.sendto(message, address)
+    serverSocket.sendto('"Pong"'.encode(), address)
