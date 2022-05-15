@@ -5,7 +5,7 @@ import random
 import time
 
 #######################
-#set delay in response#
+# set delay in response#
 delay = 0.120
 #######################
 
@@ -15,9 +15,9 @@ from socket import *
 # Notice the use of SOCK_DGRAM for UDP packets
 serverSocket = socket(AF_INET, SOCK_DGRAM)
 # Assign IP address and port number to socket
-serverSocket.bind(('', 12000))
+serverSocket.bind(("", 12000))
 pingnum = 0
-print('server running')
+print("server running")
 while True:
     # Count the pings received
     pingnum += 1
