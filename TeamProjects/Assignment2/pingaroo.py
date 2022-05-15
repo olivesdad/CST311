@@ -56,7 +56,6 @@ def pingaroo(ip, port, pings):
             clientSocket.sendto('s'.encode(), (ip, port))
             modMess, serverAddress = clientSocket.recvfrom(2048)
             print("PING "+ str(ip)+" time=" + str(timeDiff(start, time.perf_counter(), rtts)) + "ms") 
-    
         
         #socket throws timeout exception so if we exceet timeout go here and just print timeout
         except timeout:
