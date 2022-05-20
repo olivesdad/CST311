@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "reading/Ch8/8.2.md",
+            "file": "Review/Midterm 1.md",
             "mode": "source",
             "source": false
           }
@@ -69,7 +69,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "reading/Ch8/8.2.md",
+                "file": "Review/Midterm 1.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -89,15 +89,15 @@
   },
   "active": "4e02f8e9fe3c766e",
   "lastOpenFiles": [
-    "reading/Ch8/8.2.md",
-    "reading/Ch8/(XOR).md",
-    "reading/Ch8/8.1.md",
-    "reading/Ch8/NIST.md",
-    "reading/Ch8/AES.md",
-    "reading/Ch8/DES.md",
-    "reading/Ch8/3DES.md",
-    "reading/ch3/MTU.md",
+    "Review/Midterm 1.md",
+    "Bits and Shits.md",
+    "reading/ch3/sequence number field.md",
+    "Review/Pasted image 20220519210956.png",
+    "reading/Ch8/Pasted image 20220518223858.png",
     "reading/ch3/3.5.md",
-    "reading/ch3/rwnd.md"
+    "reading/ch3/3.7.md",
+    "reading/Ch8/(XOR).md",
+    "lab4/Tables.md",
+    "reading/Ch8/8.2.md"
   ]
 }
