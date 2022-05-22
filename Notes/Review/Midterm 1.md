@@ -15,10 +15,10 @@
 6. **Network layer guarantees delivery of a segment but does not guarantee orderly delivery**
 	- false
 7. ![[Pasted image 20220519210956.png]]
-	- On the path to the router from the host computer *1*
+	- when it gets into the route *2*
 8.  **x ->5Mbs-> Y  sending 250KB. What is the tranmission time?**
 	- check [[Bits and Shits]]
-	- $(1024*250*8)/(5*1,000,000)=0.496$
+	- $(1024*250*8)/(5*1,000,000)=0.4096$
 9. **Traffic intensity**  
 	- $La/R$:  L=packet size, a=packets/sec, R=transmission rate of router
 10. **When traffic Intensity is greater than 1**
@@ -28,7 +28,9 @@
 16. **WIreshark how many answers in DNS packet?**
 	- I just saw 2 blocks so i picked 2
 17. **Where do queuing delays occur?**
-	- At the router before before the out link
+	- At the router before before the out link (before transmission)
+>[!Note on Delay]
+>processing -> queuing ->transmission ->propagation 
 18. **Wireshark what is the local DNS ip?**
 	- I picked the destination **Dst:** field 
 19. **Transmission delay**
@@ -44,11 +46,17 @@
 27.  ***950KB (A) --10Mbs-> C* what is the transfer time?**
 		- [[Bits and Shits]]
 		- $(950*1024*8)/10,000,000=0.778$
-29. **DNS question gives rtt for the DNS query and then RTT to the server and asks for toal** 
+29. **DNS question gives rtt for the DNS query and then RTT to the server and asks for total** 
 >[!TCP tricky]
 >For TCP transfers we need to account for 1 $RTT_{handshake}$ per transfer
--   $RTT_{dns}(4) + RTT_{http}(54) = 58$ <- First question does not mention tcp
+-   $RTT_{dns}(4) + RTT_{http}(54) + RTT_{handshake}(54) = 112$ <- Needs handshake
 	- Suppose we need to pull 5 objects from the server and are allowed 5 parallel TCP connections
 		- We have the origignal 58ms of question 1 then we can pull the 5 additional objects referenced in parallel *Plus Handshakes*  so we have $RTT_{dns}(4)+RTT_{http}(54)+RTT_{5obj}(54)+2*RTT_{handshake}(54) = 220ms$
 	- now the supposition is that we have 5 objects that must be pulled without parallel connetions so the equation is now: $RTT_{dns}(4)+RTT_{http}(54)+5*RTT_{5obj}(54) + 6 * RTT_{handshake}(54)=652$
 	- Now same thing parallel connections with peristent HTTP the equation becomes: $RTT_{dns}(4)+RTT_{http}(54)+RTT_{5obj}(54)+2*RTT_{handshake}(54)=166$ <- This seems to imply we can open 5 parallel connections at the begnning or that the first one doesnt need a handshake??
+34. **Distribute file F = 9Gbits to each of 6 peers (p2p)**
+	- $DP2P≥max\{F/u_s,F/d_{min},NF/(u_s + ∑u_i)\}$
+		- This was File size / the slowest download rate = 818.18. And the next question asked which of the 3 values were the basis 
+36. **Distribute file Client server**
+	- $D_{c-s}≥max\{NF/u_s,F/d_{min}\}$
+	- 
