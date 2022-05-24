@@ -31,8 +31,8 @@ def connect(name, socket, data):
     else:
         print("unknown client error")
 
-    #Set ourselves as connected
-    data.connected[name]=True
+    # Set ourselves as connected
+    data.connected[name] = True
 
     # Wait for both clients to connect
     connected = False
@@ -53,9 +53,9 @@ def connect(name, socket, data):
     data.order.append(name)
     lock.release()
 
-    #Now we need server to print the message and order
+    # Now we need server to print the message and order
     place = 1 if name == data.order[0] else 0
-    print('Client {} send message {}: {}'.format(name, str(place), data.messages[name]))
+    print("Client {} send message {}: {}".format(name, str(place), data.messages[name]))
 
     # wait for both clients to send
     while not ready:
@@ -99,10 +99,10 @@ def Main():
         threads[clients - 1].start()
         clients += 1
 
-    #we need a message so wait until both clients connected then print
-    while not messages.connected['X'] and not messages.connected['Y']:
+    # we need a message so wait until both clients connected then print
+    while not messages.connected["X"] and not messages.connected["Y"]:
         thread.sleep(0.25)
-    print('\nWaiting to receive messages from client X and client Y...\n')
+    print("\nWaiting to receive messages from client X and client Y...\n")
 
     # wait here for the threads to complete
     for thread in threads:
