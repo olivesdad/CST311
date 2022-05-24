@@ -24,15 +24,16 @@ def connect(name, socket, data):
     # Just output to tell what client you are and show in server instance
     if name == "X":
         print("Accepted first connection, calling it client X")
-        socket.send("Client X connected\n".encode())
+        socket.send("Client X connected".encode())
     elif name == "Y":
         print("Accepted second connection, calling it client Y")
-        socket.send("Client Y Connected\n".encode())
+        socket.send("Client Y Connected".encode())
     else:
         print("unknown client error")
 
     #Set ourselves as connected
     data.connected[name]=True
+
     # Wait for both clients to connect
     connected = False
     while not connected:
@@ -40,8 +41,8 @@ def connect(name, socket, data):
             connected = True
 
     # both connected now send ok
-    print("SENDING OK")
     socket.send("yes".encode())
+
     # wait for data from client
     message = socket.recv(1024).decode()
 
@@ -51,6 +52,10 @@ def connect(name, socket, data):
     data.messages[name] = message
     data.order.append(name)
     lock.release()
+
+    #Now we need server to print the message and order
+    place = 1 if name == data.order[0] else 0
+    print('Client {} send message {}: {}'.format(name, str(place), data.messages[name]))
 
     # wait for both clients to send
     while not ready:
@@ -81,7 +86,7 @@ def Main():
     # instantiate the messages shared data object
     messages = SharedData()
 
-    print("The server is waiting to receive 2 connections...")
+    print("The server is waiting to receive 2 connections...\n")
 
     # Create 2 threads
     while clients <= 2:
@@ -94,12 +99,17 @@ def Main():
         threads[clients - 1].start()
         clients += 1
 
+    #we need a message so wait until both clients connected then print
+    while not messages.connected['X'] and not messages.connected['Y']:
+        thread.sleep(0.25)
+    print('\nWaiting to receive messages from client X and client Y...\n')
+
     # wait here for the threads to complete
     for thread in threads:
         thread.join()
     serverSocket.close()
 
-    print("main done")
+    print("\nDone")
 
 
 if __name__ == "__main__":
