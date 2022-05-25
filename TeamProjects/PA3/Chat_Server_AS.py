@@ -14,9 +14,6 @@ class SharedData:
     def hasMessage(self, client):
         return self.bufferFull[client]
 
-    def getMessage(self, client):
-        return self.messages[client]
-
 
 # This function used to create the thread connections
 def connect(name, socket, data):
@@ -59,7 +56,7 @@ def connect(name, socket, data):
 
     # wait for both clients to send
     while not ready:
-        ready = data.bufferFull["Y"] if name == "X" else data.bufferFull["X"]
+        ready = data.hasMessage("Y") if name == "X" else data.hasMessage("X")
 
     # This is kind of hacky use the order of the 'order' list to determine who sent first
     first = data.order[0]
