@@ -51,7 +51,7 @@ def connect(name, socket, data):
     lock.release()
 
     # Now we need server to print the message and order
-    place = 1 if name == data.order[0] else 0
+    place = 1 if name == data.order[0] else 2 
     print("Client {} send message {}: {}".format(name, str(place), data.messages[name]))
 
     # wait for both clients to send
