@@ -96,6 +96,7 @@ def Main():
         threads[clients - 1].start()
         clients += 1
 
+    serverSocket.close()
     # we need a message so wait until both clients connected then print
     while not messages.connected["X"] and not messages.connected["Y"]:
         thread.sleep(0.25)
@@ -104,7 +105,6 @@ def Main():
     # wait here for the threads to complete
     for thread in threads:
         thread.join()
-    serverSocket.close()
 
     print("\nDone")
 
