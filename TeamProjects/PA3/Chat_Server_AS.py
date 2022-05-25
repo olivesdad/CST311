@@ -17,7 +17,7 @@ class SharedData:
 
 # This function used to create the thread connections
 def connect(name, socket, data):
-    ready = False
+    
     # Just output to tell what client you are and show in server instance
     if name == "X":
         print("Accepted first connection, calling it client X")
@@ -32,10 +32,9 @@ def connect(name, socket, data):
     data.connected[name] = True
 
     # Wait for both clients to connect
-    connected = False
-    while not connected:
+    while True:
         if data.connected["X"] and data.connected["Y"]:
-            connected = True
+            break
 
     # both connected now send ok
     socket.send("yes".encode())
@@ -55,8 +54,9 @@ def connect(name, socket, data):
     print("Client {} send message {}: {}".format(name, str(place), data.messages[name]))
 
     # wait for both clients to send
-    while not ready:
-        ready = data.hasMessage("Y") if name == "X" else data.hasMessage("X")
+    while True:
+        if data.hasMessage("Y") and data.hasMessage("X"):
+            break
 
     # This is kind of hacky use the order of the 'order' list to determine who sent first
     first = data.order[0]
