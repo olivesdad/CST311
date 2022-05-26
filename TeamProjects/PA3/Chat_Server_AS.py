@@ -1,4 +1,5 @@
 import threading
+import time
 from socket import *
 
 lock = threading.Lock()
@@ -13,8 +14,31 @@ class SharedData:
 
     def hasMessage(self, client):
         return self.bufferFull[client]
+    def areConnected(self):
+        if self.connected['X'] and self.connected['Y']:
+            return True
+        else:
+            return False
 
-
+#Sender thread to send messages to client
+def Sender(name, socket, data):
+    while data.areConnected():
+        sender = 'Y' if name == 'X' else 'X'
+        
+        message = ''
+        #check buffer if sender has placed message lock and grab message
+        if data.bufferFull[sender]:
+            lock.acquire()
+            message = data.messages[sender]
+            data.bufferFull[sender] = False
+            lock.release()
+            #send message
+            socket.send(message.encode())
+        if message.strip().lower() == 'bye' or not data.connected[name]:
+            data.connected[name] = False
+    socket.close()
+        
+    
 # This function used to create the thread connections
 def connect(name, socket, data):
     
@@ -39,32 +63,31 @@ def connect(name, socket, data):
     # both connected now send ok
     socket.send("yes".encode())
 
-    # wait for data from client
-    message = socket.recv(1024).decode()
+    #we need to create a sender thread to not block on waiting
+    sender = threading.Thread(target=Sender, args=(name, socket, data))
+    sender.start()
+    
+    #While loop to recieve messages from client
+    while data.areConnected():
+      
+        message = socket.recv(1024).decode()
+        message = '\n{}\n'.format(message)
+        #wait for buffer
+        while data.bufferFull[name]:
+            time.sleep(0.25)
+            # Lock data and set message also append your name to the order
+        lock.acquire()
+        data.bufferFull[name] = True
+        data.messages[name] = message
+        data.order.append(name)
+        lock.release()
+        if message.strip().lower() == 'bye':
+            lock.acquire()
+            data.connected[name] = False
+            lock.release()
+            
 
-    # Lock data and set message also append your name to the order
-    lock.acquire()
-    data.bufferFull[name] = True
-    data.messages[name] = message
-    data.order.append(name)
-    lock.release()
-
-    # Now we need server to print the message and order
-    place = 1 if name == data.order[0] else 2 
-    print("Client {} send message {}: {}".format(name, str(place), data.messages[name]))
-
-    # wait for both clients to send
-    while True:
-        if data.hasMessage("Y") and data.hasMessage("X"):
-            break
-
-    # This is kind of hacky use the order of the 'order' list to determine who sent first
-    first = data.order[0]
-    second = data.order[1]
-    results = "{}: {} recieved before {}: {}".format(
-        first, data.messages[first], second, data.messages[second]
-    )
-    socket.send(results.encode())
+    sender.join()
     socket.close()
 
 
