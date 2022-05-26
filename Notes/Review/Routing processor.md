@@ -1,0 +1,2 @@
+- The routing processor performs control-plane functions. In traditional routers, it executes the routing protocols (which we’ll study in Sections 5.3 and 5.4), maintains routing tables and attached link state information, and computes the forwarding table for the router.
+- in [[SDN]] systems the router processor talks to the controller
