@@ -1,5 +1,6 @@
 import threading
 from socket import *
+import time
 
 lock = threading.Lock()
 
@@ -14,10 +15,15 @@ class SharedData:
     def hasMessage(self, client):
         return self.bufferFull[client]
 
+    def clear(self):
+        for name in self.messages:
+            self.messages[name] = ""
+            self.bufferFull[name] = False
+
 
 # This function used to create the thread connections
 def connect(name, socket, data):
-    
+
     # Just output to tell what client you are and show in server instance
     if name == "X":
         print("Accepted first connection, calling it client X")
@@ -33,6 +39,7 @@ def connect(name, socket, data):
 
     # Wait for both clients to connect
     while True:
+        time.sleep(0.25)
         if data.connected["X"] and data.connected["Y"]:
             break
 
@@ -50,15 +57,16 @@ def connect(name, socket, data):
     lock.release()
 
     # Now we need server to print the message and order
-    place = 1 if name == data.order[0] else 2 
-    print("Client {} send message {}: {}".format(name, str(place), data.messages[name]))
+    place = 1 if name == data.order[0] else 2
+    print("Client {} sent message {}: {}".format(name, str(place), data.messages[name]))
 
     # wait for both clients to send
     while True:
+        time.sleep(0.25)
         if data.hasMessage("Y") and data.hasMessage("X"):
             break
 
-    # This is kind of hacky use the order of the 'order' list to determine who sent first
+    # This is kind of hacky... use the order of the 'order' list to determine who sent first
     first = data.order[0]
     second = data.order[1]
     results = "{}: {} recieved before {}: {}".format(
@@ -76,8 +84,7 @@ def Main():
     serverSocket.bind(("", serverPort))
     serverSocket.listen(1)
 
-    clients = 1
-    threads = ["", ""]
+    threads = []
     names = ["X", "Y"]
 
     # instantiate the messages shared data object
@@ -86,25 +93,25 @@ def Main():
     print("The server is waiting to receive 2 connections...\n")
 
     # Create 2 threads
-    while clients <= 2:
+    for name in names:
+
         connectionSocket, addr = serverSocket.accept()
-
         # create a connection (thread) put it in the list then start it
-        threads[clients - 1] = threading.Thread(
-            target=connect, args=(names[clients - 1], connectionSocket, messages)
-        )
-        threads[clients - 1].start()
-        clients += 1
-
+        t = threading.Thread(target=connect, args=(name, connectionSocket, messages))
+        t.start()
+        threads.append(t)
     serverSocket.close()
     # we need a message so wait until both clients connected then print
     while not messages.connected["X"] and not messages.connected["Y"]:
-        thread.sleep(0.25)
+        time.sleep(0.25)
+
     print("\nWaiting to receive messages from client X and client Y...\n")
 
     # wait here for the threads to complete
     for thread in threads:
         thread.join()
+    # clear messages. Not needed for this version but test for persistant chat
+    messages.clear()
 
     print("\nDone")
 
