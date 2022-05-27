@@ -67,6 +67,7 @@ def connect(name, socket, data):
             break
 
     # both connected now send ok
+    time.sleep(0.25)
     socket.send("yes".encode())
 
     # we need to create a sender thread to not block on waiting
@@ -81,7 +82,7 @@ def connect(name, socket, data):
         except:
             message = "bye"
             continue
-        
+
         # wait for buffer
         while data.bufferFull[name]:
             time.sleep(0.25)
