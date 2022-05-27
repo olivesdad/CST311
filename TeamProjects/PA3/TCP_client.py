@@ -7,9 +7,12 @@ serverName = "127.0.0.1"
 serverPort = 12000
 
 
-def threadListener(sock, connected):
+def threadListener(sock, connected, name):
     # loop for reading and printing messages
     sock.settimeout(4)
+    
+    #flip name
+    name = 'Y' if name == 'X' else 'Y'
     while connected[0]:
         try:
             message = sock.recv(1024).decode()
@@ -19,10 +22,10 @@ def threadListener(sock, connected):
             tLock.acquire()
             connected[0] = False
             tLock.release()
-            print("Partner said Bye!")
+            print("{} said Bye!".format(name))
             break
         if message.strip().lower() != '':
-            print("Message: {}".format(message))
+            print("\n{}: {}\n".format(name,message))
     sock.close()
 
 
@@ -35,6 +38,9 @@ def main():
 
     # This bit is for the "client has connected"
     serverResponse = clientSocket.recv(1024)
+    #get my name
+    name = serverResponse.decode().split(' ')[1]
+
     print("From Server: " + serverResponse.decode())
 
     # Wait for ok
@@ -44,7 +50,7 @@ def main():
 
     # create listener thread
     chatListener = threading.Thread(
-        target=threadListener, args=(clientSocket, connected)
+        target=threadListener, args=(clientSocket, connected, name)
     )
     chatListener.start()
 

@@ -81,7 +81,7 @@ def connect(name, socket, data):
         except:
             message = "bye"
             continue
-        message = "\n{}\n".format(message)
+        
         # wait for buffer
         while data.bufferFull[name]:
             time.sleep(0.25)
