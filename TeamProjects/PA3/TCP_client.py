@@ -12,7 +12,7 @@ def threadListener(sock, connected, name):
     sock.settimeout(4)
     
     #flip name
-    name = 'Y' if name == 'X' else 'Y'
+    name = 'Y' if name == 'X' else 'X'
     while connected[0]:
         try:
             message = sock.recv(1024).decode()

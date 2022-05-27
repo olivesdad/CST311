@@ -7,12 +7,8 @@
         "id": "134b811524e7ffa3",
         "type": "leaf",
         "state": {
-          "type": "markdown",
-          "state": {
-            "file": "Multi-Threaded.md",
-            "mode": "source",
-            "source": false
-          }
+          "type": "empty",
+          "state": {}
         }
       }
     ],
@@ -69,7 +65,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Multi-Threaded.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -89,6 +84,7 @@
   },
   "active": "134b811524e7ffa3",
   "lastOpenFiles": [
+    "reading/Ch4/4.2.md",
     "Multi-Threaded.md",
     "Labs/Programming Assignment 3/PA3 TCP Server.md",
     "reading/Ch8/8.2.md",
@@ -97,7 +93,6 @@
     "reading/Ch8/8.6.md",
     "reading/Ch8/8.5.md",
     "reading/Ch8/8.4.md",
-    "reading/ch3/3.7.md",
-    "reading/ch3/3.5.md"
+    "reading/ch3/3.7.md"
   ]
 }
