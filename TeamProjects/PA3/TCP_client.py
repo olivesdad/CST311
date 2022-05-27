@@ -21,7 +21,8 @@ def threadListener(sock, connected):
             tLock.release()
             print("Partner said Bye!")
             break
-        print("Message: {}".format(message))
+        if message.strip().lower() != '':
+            print("Message: {}".format(message))
     sock.close()
 
 
