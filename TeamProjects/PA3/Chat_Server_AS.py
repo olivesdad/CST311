@@ -14,34 +14,40 @@ class SharedData:
 
     def hasMessage(self, client):
         return self.bufferFull[client]
+
     def areConnected(self):
-        if self.connected['X'] and self.connected['Y']:
+        if self.connected["X"] or self.connected["Y"]:
             return True
         else:
             return False
 
-#Sender thread to send messages to client
+
+# Sender thread to send messages to client
 def Sender(name, socket, data):
     while data.areConnected():
-        sender = 'Y' if name == 'X' else 'X'
-        
-        message = ''
-        #check buffer if sender has placed message lock and grab message
+        sender = "Y" if name == "X" else "X"
+
+        message = ""
+        # check buffer if sender has placed message lock and grab message
         if data.bufferFull[sender]:
             lock.acquire()
             message = data.messages[sender]
             data.bufferFull[sender] = False
             lock.release()
-            #send message
+            # send message
             socket.send(message.encode())
-        if message.strip().lower() == 'bye' or not data.connected[name]:
+            print("{} sending {} ".format(name, message))
+        if message.strip().lower() == "bye" or not data.connected[name]:
+            lock.acquire()
             data.connected[name] = False
+            lock.release()
+
     socket.close()
-        
-    
+
+
 # This function used to create the thread connections
 def connect(name, socket, data):
-    
+
     # Just output to tell what client you are and show in server instance
     if name == "X":
         print("Accepted first connection, calling it client X")
@@ -63,16 +69,20 @@ def connect(name, socket, data):
     # both connected now send ok
     socket.send("yes".encode())
 
-    #we need to create a sender thread to not block on waiting
+    # we need to create a sender thread to not block on waiting
     sender = threading.Thread(target=Sender, args=(name, socket, data))
     sender.start()
-    
-    #While loop to recieve messages from client
+
+    # While loop to recieve messages from client
     while data.areConnected():
-      
-        message = socket.recv(1024).decode()
-        message = '\n{}\n'.format(message)
-        #wait for buffer
+        socket.settimeout(1)
+        try:
+            message = socket.recv(1024).decode()
+        except:
+            message = "bye"
+            continue
+        message = "\n{}\n".format(message)
+        # wait for buffer
         while data.bufferFull[name]:
             time.sleep(0.25)
             # Lock data and set message also append your name to the order
@@ -81,11 +91,10 @@ def connect(name, socket, data):
         data.messages[name] = message
         data.order.append(name)
         lock.release()
-        if message.strip().lower() == 'bye':
+        if message.strip().lower() == "bye":
             lock.acquire()
             data.connected[name] = False
             lock.release()
-            
 
     sender.join()
     socket.close()
@@ -123,13 +132,15 @@ def Main():
     # we need a message so wait until both clients connected then print
     while not messages.connected["X"] and not messages.connected["Y"]:
         thread.sleep(0.25)
-    print("\nWaiting to receive messages from client X and client Y...\n")
+    print("\nSession active\n")
 
     # wait here for the threads to complete
     for thread in threads:
         thread.join()
+    print("Waiting for clients to close their connections...")
+    time.sleep(2)
 
-    print("\nDone")
+    print("\nMain Done")
 
 
 if __name__ == "__main__":
