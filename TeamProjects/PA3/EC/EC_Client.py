@@ -1,5 +1,6 @@
 from concurrent.futures import thread
 from socket import *
+import signal
 import threading
 
 tLock = threading.Lock()
@@ -10,9 +11,9 @@ serverPort = 12000
 def threadListener(sock, connected, name):
     # loop for reading and printing messages
     sock.settimeout(4)
-    
-    #flip name
-    name = 'Y' if name == 'X' else 'X'
+
+    # flip name
+    name = "Y" if name == "X" else "X"
     while connected[0]:
         try:
             message = sock.recv(1024).decode()
@@ -24,8 +25,8 @@ def threadListener(sock, connected, name):
             tLock.release()
             print("{} said Bye!".format(name))
             break
-        if message.strip().lower() != '':
-            print("{}: {}".format(name,message))
+        if message.strip().lower() != "":
+            print("{}: {}".format(name, message))
     sock.close()
 
 
@@ -38,8 +39,8 @@ def main():
 
     # This bit is for the "client has connected"
     serverResponse = clientSocket.recv(1024)
-    #get my name
-    name = serverResponse.decode().split(' ')[1]
+    # get my name
+    name = serverResponse.decode().split(" ")[1]
 
     print("From Server: " + serverResponse.decode())
 
@@ -58,7 +59,13 @@ def main():
     # loop for message sending
     while connected[0]:
         # Here to send the message
-        message = input()
+        message = ""
+
+        signal.alarm(5)
+        try:
+            message = input()
+        except:
+            print("slowby")
         # if we send bye then set connected to false
         if message.strip().lower() == "bye":
             tLock.acquire()
