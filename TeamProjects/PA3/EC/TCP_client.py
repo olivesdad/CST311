@@ -25,7 +25,7 @@ def threadListener(sock, connected, name):
             print("{} said Bye!".format(name))
             break
         if message.strip().lower() != '':
-            print("\n{}: {}\n".format(name,message))
+            print("\n{}: {}".format(name,message))
     sock.close()
 
 
@@ -54,10 +54,11 @@ def main():
     )
     chatListener.start()
 
+    print("You're now connected! start chatting!")
     # loop for message sending
     while connected[0]:
         # Here to send the message
-        message = input("Enter message to send to server: ")
+        message = input()
         # if we send bye then set connected to false
         if message.strip().lower() == "bye":
             tLock.acquire()
