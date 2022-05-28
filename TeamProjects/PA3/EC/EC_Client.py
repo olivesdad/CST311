@@ -25,7 +25,7 @@ def threadListener(sock, connected, name):
             print("{} said Bye!".format(name))
             break
         if message.strip().lower() != '':
-            print("\n{}: {}".format(name,message))
+            print("{}: {}".format(name,message))
     sock.close()
 
 
